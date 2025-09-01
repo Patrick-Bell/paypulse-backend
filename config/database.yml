@@ -20,3 +20,8 @@ test:
 production:
   <<: *default
   database: <%= ENV['SUPABASE_DATABASE'] || 'postgres' %>
+
+  cable:
+  <<: *default
+  url: <%= ENV['DATABASE_URL'] %>
+  sslmode: require
