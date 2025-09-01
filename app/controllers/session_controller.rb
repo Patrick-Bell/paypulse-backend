@@ -1,4 +1,5 @@
 class SessionController < ApplicationController
+    require 'jwt'
 
     include ActionController::Cookies
     JWT_SECRET_KEY = ENV['JWT_SECRET_KEY']
@@ -39,8 +40,9 @@ class SessionController < ApplicationController
 
 
 
+
     def logout
-        cookies.delete(:token,
+        cookies.delete(:jwt,
         domain: 'paypulse-finance.netlify.app',
         secure: Rails.env.production?,
         same_site: Rails.env.production? ? :none : :lax,
