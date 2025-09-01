@@ -11,30 +11,25 @@ class SessionController < ApplicationController
       
         if user.authenticate(params[:user][:password])
           token = generate_jwt_token(user)
+      
           cookies[:jwt] = {
             value: token,
             httponly: true,
             expires: 2.hours.from_now,
-            same_site: Rails.env.production? ? :none : :lax,
             secure: Rails.env.production?,
-            domain: Rails.env.production? ? 'paypulse-finance.netlify.app' : nil,
+            same_site: :none,
             path: '/'
           }
       
-          render json: { token: token, user: user, message: 'Login successful' }, status: :ok
+          render json: { message: 'Login successful' }, status: :ok
         else
           render json: { error: 'Invalid password' }, status: :unauthorized
         end
       end
       
+      
       def logout
-        cookies.delete(:jwt,
-          domain: Rails.env.production? ? 'paypulse-finance.netlify.app' : nil,
-          secure: Rails.env.production?,
-          same_site: Rails.env.production? ? :none : :lax,
-          httponly: true,
-          path: '/'
-        )
+        cookies.delete(:jwt)
         render json: { message: 'Logout successful' }, status: :ok
       end
       
