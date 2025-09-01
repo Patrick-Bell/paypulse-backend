@@ -1,0 +1,31 @@
+
+daily_shift_job:
+  cron: "0 0 * * *"
+  class: "DailyShiftJob"
+  description: "Send shift reminders at midnight"
+  timezone: "Europe/London"  # or your preferred timezone
+
+  # config/sidekiq_schedule.yml
+generate_payslip:
+  cron: "0 12 1 * *" 
+  class: "GeneratePayslipJob"
+  description: "Generate monthly payslip"
+  timezone: "Europe/London"
+
+generate_payslip_reminder:
+  cron: "0 12 28 * *"
+  class: "PayslipReminderJob"
+  description: "Send payslip reminder on the 28th of every month"
+  timezone: "Europe/London"
+
+weekly_shift_email:
+  cron: "0 9 * * 1"   # At 09:00 every Monday
+  class: "WeeklyShiftEmailJob"
+  description: "Send weekly shift emails every Monday"
+  timezone: "Europe/London"
+
+monthly_summary:
+  cron : "0 9 1 * *"  # At 09:00 on the first day of every month
+  class: "MonthlySummaryEmailJob"
+  description: "Send monthly summary emails"
+  timezone: "Europe/London"

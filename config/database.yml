@@ -1,0 +1,18 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+  host: <%= ENV['SUPABASE_HOST'] %>
+  username: <%= ENV['SUPABASE_USERNAME'] %>
+  password: <%= ENV['SUPABASE_PASSWORD'] %>
+  port: <%= ENV['SUPABASE_PORT'] || 5432 %>
+  sslmode: require
+
+development:
+  <<: *default
+  database: <%= ENV['SUPABASE_DATABASE'] || 'postgres' %>
+
+test:
+  <<: *default
+  database: <%= ENV['SUPABASE_DATABASE'] || 'postgres' %>

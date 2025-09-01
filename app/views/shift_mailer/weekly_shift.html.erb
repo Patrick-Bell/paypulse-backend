@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Shift Summary</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8fafc;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+        }
+        .header {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 30px 25px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px 25px;
+        }
+        .week-section {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 35px;
+        }
+        .week-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .week-title .icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            background: #6366f1;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px 15px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+        }
+        .comparison-section {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+        .comparison-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        .comparison-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px 15px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        .comparison-value {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .comparison-value.positive {
+            color: #059669;
+        }
+        .comparison-value.negative {
+            color: #dc2626;
+        }
+        .comparison-value.neutral {
+            color: #64748b;
+        }
+        .comparison-label {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+        }
+        .footer {
+            background: #f8fafc;
+            padding: 25px;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+        }
+        .footer p {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .date-range {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 15px;
+        }
+        @media (max-width: 600px) {
+            .stats-grid, .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                margin: 10px;
+                border-radius: 8px;
+            }
+            .content {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Weekly Shift Summary</h1>
+            <p>Your week at a glance</p>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Last Week Section -->
+            <div class="week-section">
+                <div class="week-title">
+                    Last Week Performance
+                </div>
+                <div class="date-range">
+                <strong><%= @last_monday.strftime('%A %-d, %B') %> - <%= @last_sunday.strftime('%A %-d, %B') %></strong>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value"><%= @last_week_shifts_count %></div>
+                        <div class="stat-label">Shifts Worked</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">£<%= sprintf('%.2f', @last_week_pay) %></div>
+                        <div class="stat-label">Total Earnings</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value"><%= sprintf('%.1f', @last_week_hours) %></div>
+                        <div class="stat-label">Hours Worked</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comparison Section -->
+            <div class="comparison-section">
+                <div class="comparison-title">
+                    Compared to Previous Week
+                </div>
+                <div class="date-range" style="text-align: center; margin-bottom: 20px;">
+                    <em>vs. <%= @two_weeks_ago_monday.strftime('%A %-d, %B') %> - <%= @two_weeks_ago_sunday.strftime('%A %-d, %B') %></em>
+                </div>
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <div class="comparison-value <%= @shift_difference > 0 ? 'positive' : @shift_difference < 0 ? 'negative' : 'neutral' %>">
+                            <%= @shift_difference > 0 ? '+' : '' %><%= @shift_difference %>
+                        </div>
+                        <div class="comparison-label">Shift Change</div>
+                    </div>
+                    <div class="comparison-card">
+                        <div class="comparison-value <%= @pay_difference > 0 ? 'positive' : @pay_difference < 0 ? 'negative' : 'neutral' %>">
+                            <%= @pay_difference > 0 ? '+' : '' %>£<%= sprintf('%.2f', @pay_difference) %>
+                        </div>
+                        <div class="comparison-label">Pay Change</div>
+                    </div>
+                    <div class="comparison-card">
+                        <div class="comparison-value <%= @hours_difference > 0 ? 'positive' : @hours_difference < 0 ? 'negative' : 'neutral' %>">
+                            <%= @hours_difference > 0 ? '+' : '' %><%= sprintf('%.1f', @hours_difference) %>h
+                        </div>
+                        <div class="comparison-label">Hours Change</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Insights -->
+            <div class='comparison-section'>
+                <div class='comparison-title'>Weekly Insights</div>
+                <% if @last_week_pay > 0 %>
+                    <p class="comparison-label">
+                        • Average earnings per shift: <strong>£<%= sprintf('%.2f', @last_week_shifts_count > 0 ? @last_week_pay / @last_week_shifts_count : 0) %></strong>
+                    </p>
+                <% end %>
+                <% if @last_week_hours > 0 %>
+                    <p class="comparison-label">
+                        • Average hours per shift: <strong><%= sprintf('%.1f', @last_week_shifts_count > 0 ? @last_week_hours / @last_week_shifts_count : 0) %> hours</strong>
+                    </p>
+                <% end %>
+                <% if @last_week_hours > 0 && @last_week_pay > 0 %>
+                    <p class="comparison-label">
+                        • Hourly rate: <strong>£<%= sprintf('%.2f', @last_week_pay / @last_week_hours) %>/hour</strong>
+                    </p>
+                <% end %>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Keep up the great work, <%= @user.first_name || @user.name %>! 🎉</p>
+            <p>Ready to view your full dashboard?</p>
+            <a href="[DASHBOARD_URL]" class="cta-button">View Dashboard →</a>
+            <p style="margin-top: 15px; font-size: 12px; color: #94a3b8;">
+                This is an automated email from PayPulse. You can manage your email preferences in your account settings.
+            </p>
+        </div>
+    </div>
+</body>
+</html>
