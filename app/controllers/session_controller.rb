@@ -5,52 +5,39 @@ class SessionController < ApplicationController
     JWT_SECRET_KEY = ENV['JWT_SECRET_KEY']
 
 
-
     def login
         user = User.find_by(email: params[:user][:email])
-
-        if !user
-            render json: { error: 'User not found' }, status: :not_found
-            return
-        end
-
+        return render json: { error: 'User not found' }, status: :not_found unless user
+      
         if user.authenticate(params[:user][:password])
-            token = generate_jwt_token(user)
-
-            cookie_options = {
-                value: token,
-                httponly: true,
-                expires: 2.hours.from_now,
-                same_site: Rails.env.production? ? :none : :lax,
-                secure: Rails.env.production?,
-                domain: 'paypulse-finance.netlify.app',
-                path: '/'
-            }
-
-            cookies[:jwt] = cookie_options
-            
-
-            render json: { token: token, user: user, message: 'Login successful' }, status: :ok
+          token = generate_jwt_token(user)
+          cookies[:jwt] = {
+            value: token,
+            httponly: true,
+            expires: 2.hours.from_now,
+            same_site: Rails.env.production? ? :none : :lax,
+            secure: Rails.env.production?,
+            domain: Rails.env.production? ? 'paypulse-finance.netlify.app' : nil,
+            path: '/'
+          }
+      
+          render json: { token: token, user: user, message: 'Login successful' }, status: :ok
         else
-            render json: { error: 'Invalid password' }, status: :unauthorized
+          render json: { error: 'Invalid password' }, status: :unauthorized
         end
-
-    end
-
-
-
-
-
-    def logout
+      end
+      
+      def logout
         cookies.delete(:jwt,
-        domain: 'paypulse-finance.netlify.app',
-        secure: Rails.env.production?,
-        same_site: Rails.env.production? ? :none : :lax,
-        httponly: true,
-        path: '/'
+          domain: Rails.env.production? ? 'paypulse-finance.netlify.app' : nil,
+          secure: Rails.env.production?,
+          same_site: Rails.env.production? ? :none : :lax,
+          httponly: true,
+          path: '/'
         )
         render json: { message: 'Logout successful' }, status: :ok
-    end
+      end
+      
 
     def current_user
         get_current_user || { error: 'No user logged in' }
