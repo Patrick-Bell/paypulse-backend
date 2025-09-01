@@ -21,6 +21,10 @@ production:
     <<: *default
     database: <%= ENV['SUPABASE_DATABASE'] || 'postgres' %>
 
+  cable:
+    <<: *default
+    database: <%= ENV['SUPABASE_DATABASE'] || 'postgres' %>
+
   queue:
     <<: *default
     database: <%= ENV['SUPABASE_QUEUE_DATABASE'] || 'postgres' %>
