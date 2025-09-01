@@ -22,7 +22,7 @@ class SessionController < ApplicationController
                 expires: 2.hours.from_now,
                 same_site: Rails.env.production? ? :none : :lax,
                 secure: Rails.env.production?,
-                domain: 'paypulse-finance.netlify.app'
+                domain: 'paypulse-finance.netlify.app',
                 path: '/'
             }
 
@@ -41,7 +41,7 @@ class SessionController < ApplicationController
 
     def logout
         cookies.delete(:token,
-        domain: 'paypulse-finance.netlify.app'
+        domain: 'paypulse-finance.netlify.app',
         secure: Rails.env.production?,
         same_site: Rails.env.production? ? :none : :lax,
         httponly: true,
