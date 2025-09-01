@@ -17,11 +17,13 @@ class SessionController < ApplicationController
             token = generate_jwt_token(user)
 
             cookie_options = {
+                value: token,
                 httponly: true,
+                expires: 2.hours.from_now,
+                same_site: Rails.env.production? ? :none : :lax,
                 secure: Rails.env.production?,
-                same_site: :strict,
-                expires: 1.hour.from_now,
-                value: token
+                domain: 'https://paypulse-finance.netlify.app', # ✅ exact match
+                path: '/'
             }
 
             cookies[:jwt] = cookie_options
@@ -38,7 +40,13 @@ class SessionController < ApplicationController
 
 
     def logout
-        cookies.delete(:jwt)
+        cookies.delete(:token,
+        domain: 'https://paypulse-finance.netlify.app', # ✅ exact match
+        secure: Rails.env.production?,
+        same_site: Rails.env.production? ? :none : :lax,
+        httponly: true,
+        path: '/'
+        )
         render json: { message: 'Logout successful' }, status: :ok
     end
 
