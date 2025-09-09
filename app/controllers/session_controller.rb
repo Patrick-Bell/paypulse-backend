@@ -16,13 +16,13 @@ class SessionController < ApplicationController
             value: token,
             httponly: true,
             expires: 2.hours.from_now,
-            same_site: :none,
+            same_site: :lax,
             secure: Rails.env.production?,
             path: '/'           
             }
 
       
-          render json: { message: 'Login successful' }, status: :ok
+          render json: { message: 'Login successful', user: user }, status: :ok
         else
           render json: { error: 'Invalid password' }, status: :unauthorized
         end
@@ -33,7 +33,7 @@ class SessionController < ApplicationController
         cookies.delete(:jwt,
         path: '/',
         secure: Rails.env.production?,
-        same_site: :none,
+        same_site: :lax,
         httponly: true
       )
         render json: { message: 'Logout successful' }, status: :ok

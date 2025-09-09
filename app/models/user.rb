@@ -8,6 +8,7 @@ class User < ApplicationRecord
     has_many :goals
     has_many :payslips
     has_many :expenses, through: :shifts
+    has_many :reports
 
     validates :email, uniqueness: { message: "This email is already registered" }
 

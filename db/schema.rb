@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_25_153338) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_08_144113) do
   create_schema "auth"
   create_schema "extensions"
   create_schema "graphql"
@@ -90,6 +90,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_25_153338) do
     t.index ["user_id"], name: "index_payslips_on_user_id"
   end
 
+  create_table "reports", force: :cascade do |t|
+    t.string "name"
+    t.date "start_date"
+    t.date "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_reports_on_user_id"
+  end
+
   create_table "shifts", force: :cascade do |t|
     t.string "name"
     t.datetime "start_time"
@@ -129,5 +139,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_25_153338) do
   add_foreign_key "expenses", "shifts"
   add_foreign_key "goals", "users"
   add_foreign_key "payslips", "users"
+  add_foreign_key "reports", "users"
   add_foreign_key "shifts", "users"
 end
