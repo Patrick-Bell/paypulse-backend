@@ -16,8 +16,8 @@ class SessionController < ApplicationController
             value: token,
             httponly: true,
             expires: 2.hours.from_now,
-            same_site: :lax,
-            secure: Rails.env.production?,
+            secure: Rails.env.production? ? true : false,
+            same_site: Rails.env.development? ? :lax : :none,
             path: '/'           
             }
 
@@ -32,13 +32,13 @@ class SessionController < ApplicationController
       def logout
         cookies.delete(:jwt,
         path: '/',
-        secure: Rails.env.production?,
-        same_site: :lax,
-        httponly: true
+        secure: Rails.env.production? ? true : false,
+        same_site: Rails.env.development? ? :lax : :none,
+        httponly: true,
+        signed: true,
       )
         render json: { message: 'Logout successful' }, status: :ok
-      end
-      
+      end    
 
     def current_user
         get_current_user || { error: 'No user logged in' }
