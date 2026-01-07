@@ -7,7 +7,9 @@ class ChatbotController < ApplicationController
   def ask_chatbot
 
     if Rails.env.production?
-      render json: { answer: "Chatbot functionality is disabled in development environment." }
+      return render json: {
+        answer: "Chatbot functionality is disabled in production."
+      }
     end
 
 
