@@ -5,6 +5,12 @@ class ChatbotController < ApplicationController
   require 'json'
 
   def ask_chatbot
+
+    if Rails.env.production?
+      render json: { answer: "Chatbot functionality is disabled in development environment." }
+    end
+
+
     question = params[:question]
 
     start = Date.current.beginning_of_month
